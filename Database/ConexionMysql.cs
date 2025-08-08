@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using CRUD_Cshart.Config;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,16 +8,23 @@ using System.Threading.Tasks;
 
 namespace CRUD_Cshart.Database
 {
-    internal class ConexionMysql : Conexion
+    internal class ConexionMysql 
     {
         private MySqlConnection connection;
         protected string cadenaConexion;
         public ConexionMysql() 
         {
-            cadenaConexion = "Database=" +database +
-                             ";Data Source=" + server +
-                             ";User Id=" + user +
-                             ";Password=" + password;
+            string? database = ConfigManager.Get("db.name");
+            string? server = ConfigManager.Get("db.host");
+            string? user = ConfigManager.Get("db.user");
+            string? password = ConfigManager.Get("db.password");
+
+            if (database == null || server == null || user == null || password == null)
+            {
+                throw new Exception("Faltan claves en el archivo config.properties");
+            }
+
+            cadenaConexion = $"Database={database};Data Source={server};User Id={user};Password={password}";
             connection = new MySqlConnection(cadenaConexion);
         }
 
