@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `aprendices` (
   `segundo_nombre` varchar(50) DEFAULT NULL,
   `primer_apellido` varchar(50) NOT NULL,
   `segundo_apellido` varchar(50) DEFAULT NULL,
-  `fecha_nacimineto` date NOT NULL,
+  `fecha_nacimiento` date NOT NULL,
   `tipo_documento_id` int NOT NULL,
   `numero_documento` varchar(10) NOT NULL,
   `grupo_sanguineo_id` int NOT NULL,
@@ -35,14 +35,17 @@ CREATE TABLE IF NOT EXISTS `aprendices` (
   CONSTRAINT `FK_personas_tema_parametro_3` FOREIGN KEY (`factor_sanguineo_id`) REFERENCES `tema_parametro` (`id`),
   CONSTRAINT `FK_personas_tema_parametro_4` FOREIGN KEY (`genero_id`) REFERENCES `tema_parametro` (`id`),
   CONSTRAINT `FK_personas_tema_parametro_5` FOREIGN KEY (`programa_id`) REFERENCES `tema_parametro` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `aprendices` (`id`, `primer_nombre`, `segundo_nombre`, `primer_apellido`, `segundo_apellido`, `fecha_nacimiento`, `tipo_documento_id`, `numero_documento`, `grupo_sanguineo_id`, `factor_sanguineo_id`, `genero_id`, `programa_id`) VALUES
+	(2, 'h', 'h', 'h', 'h', '2025-08-08', 2, '453', 1, 1, 1, 1),
+	(3, 'nicolas', 'antonio', 'arrieta', 'lagos', '2004-10-29', 1, '1099735735', 1, 1, 1, 1);
 
 CREATE TABLE IF NOT EXISTS `parametro` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `parametro` (`id`, `nombre`) VALUES
 	(1, 'CÉDULA DE CIUDADANÍA'),
@@ -57,7 +60,9 @@ INSERT INTO `parametro` (`id`, `nombre`) VALUES
 	(10, 'AB'),
 	(11, 'O'),
 	(12, '+'),
-	(13, '-');
+	(13, '-'),
+	(14, 'ADSO'),
+	(15, 'SST');
 
 CREATE TABLE IF NOT EXISTS `temas` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -81,8 +86,24 @@ CREATE TABLE IF NOT EXISTS `tema_parametro` (
   KEY `FK_tema_parametro_parametro` (`parametro_id`),
   CONSTRAINT `FK_tema_parametro_parametro` FOREIGN KEY (`parametro_id`) REFERENCES `parametro` (`id`),
   CONSTRAINT `FK_tema_parametro_temas` FOREIGN KEY (`tema_id`) REFERENCES `temas` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `tema_parametro` (`id`, `tema_id`, `parametro_id`) VALUES
+	(1, 1, 1),
+	(2, 3, 8),
+	(3, 2, 5),
+	(4, 4, 12),
+	(5, 5, 14),
+	(6, 1, 2),
+	(7, 1, 3),
+	(8, 1, 4),
+	(9, 4, 13),
+	(10, 2, 6),
+	(11, 2, 7),
+	(12, 3, 9),
+	(13, 3, 11),
+	(14, 3, 10),
+	(15, 5, 15);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
