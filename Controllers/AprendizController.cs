@@ -90,5 +90,25 @@ namespace CRUD_Cshart.Controllers
                 return false;
             }
         }
+
+        public bool EliminarAprendiz(int id)
+        {
+            try
+            {
+                using (MySqlConnection conn = getConnection())
+                {
+                    string query = "DELETE FROM aprendices WHERE id = @id";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    int result = cmd.ExecuteNonQuery();
+                    return result > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar: " + ex.Message);
+                return false;
+            }
+        }
     }
 }
