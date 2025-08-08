@@ -12,7 +12,7 @@ namespace CRUD_Cshart
             // see https://aka.ms/applicationconfiguration.
             CargarConfiguracion();
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Application.Run(new Formulario());
         }
     }
 }
