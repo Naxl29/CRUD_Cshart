@@ -19,10 +19,10 @@ namespace CRUD_Cshart.Controllers
                 using (MySqlConnection conn = getConnection())
                 {
                     string query = @"INSERT INTO aprendices 
-                    (primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimineto, tipo_documento_id, numero_documento,
+                    (primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, tipo_documento_id, numero_documento,
                      grupo_sanguineo_id, factor_sanguineo_id, genero_id, programa_id)
                     VALUES
-                    (@primer_nombre, @segundo_nombre, @primer_apellido, @segundo_apellido, @fecha_nacimineto, @tipo_documento_id, @numero_documento,
+                    (@primer_nombre, @segundo_nombre, @primer_apellido, @segundo_apellido, @fecha_nacimiento, @tipo_documento_id, @numero_documento,
                      @grupo_sanguineo_id, @factor_sanguineo_id, @genero_id, @programa_id)";
 
                     MySqlCommand cmd = new MySqlCommand(query, conn);
@@ -30,7 +30,7 @@ namespace CRUD_Cshart.Controllers
                     cmd.Parameters.AddWithValue("@segundo_nombre", aprendiz.SegundoNombre);
                     cmd.Parameters.AddWithValue("@primer_apellido", aprendiz.PrimerApellido);
                     cmd.Parameters.AddWithValue("@segundo_apellido", aprendiz.SegundoApellido);
-                    cmd.Parameters.AddWithValue("@fecha_nacimineto", aprendiz.FechaNacimiento);
+                    cmd.Parameters.AddWithValue("@fecha_nacimiento", aprendiz.FechaNacimiento);
                     cmd.Parameters.AddWithValue("@tipo_documento_id", aprendiz.TipoDocumentoId);
                     cmd.Parameters.AddWithValue("@numero_documento", aprendiz.NumeroDocumento);
                     cmd.Parameters.AddWithValue("@grupo_sanguineo_id", aprendiz.GrupoSanguineoId);
