@@ -48,5 +48,47 @@ namespace CRUD_Cshart.Controllers
                 return false;
             }
         }
+        public bool VerAprendiz(int id)
+        {
+            try
+            {
+                using (MySqlConnection conn = getConnection())
+                {
+                    string query = "SELECT * FROM aprendices WHERE id = @id";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    MySqlDataReader reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        Aprendiz aprendiz = new Aprendiz
+                        {
+                            Id = reader.GetInt32("id"),
+                            PrimerNombre = reader.GetString("primer_nombre"),
+                            SegundoNombre = reader.GetString("segundo_nombre"),
+                            PrimerApellido = reader.GetString("primer_apellido"),
+                            SegundoApellido = reader.GetString("segundo_apellido"),
+                            FechaNacimiento = reader.GetDateTime("fecha_nacimiento"),
+                            TipoDocumentoId = reader.GetInt32("tipo_documento_id"),
+                            NumeroDocumento = reader.GetString("numero_documento"),
+                            GrupoSanguineoId = reader.GetInt32("grupo_sanguineo_id"),
+                            FactorSanguineoId = reader.GetInt32("factor_sanguineo_id"),
+                            GeneroId = reader.GetInt32("genero_id"),
+                            ProgramaId = reader.GetInt32("programa_id")
+                        };
+                        return true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Aprendiz no encontrado.");
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al consultar: " + ex.Message);
+                return false;
+            }
+        }
     }
 }
