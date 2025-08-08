@@ -38,9 +38,9 @@ CREATE TABLE IF NOT EXISTS `aprendices` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
-CREATE TABLE IF NOT EXISTS `parametro` (
+CREATE TABLE IF NOT EXISTS `parametros` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(50) NOT NULL DEFAULT '',
+  `nombre_parametro` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -61,7 +61,7 @@ INSERT INTO `parametro` (`id`, `nombre`) VALUES
 
 CREATE TABLE IF NOT EXISTS `temas` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nombre_tema` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -72,7 +72,7 @@ INSERT INTO `temas` (`id`, `nombre`) VALUES
 	(4, 'FACTOR_SANGUINEO'),
 	(5, 'PROGRAMA_FORMACION');
 
-CREATE TABLE IF NOT EXISTS `tema_parametro` (
+CREATE TABLE IF NOT EXISTS `temas_parametros` (
   `id` int NOT NULL AUTO_INCREMENT,
   `tema_id` int NOT NULL,
   `parametro_id` int NOT NULL,
