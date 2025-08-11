@@ -2,63 +2,109 @@
 using System.Windows.Forms;
 using CRUD_Cshart.Controllers;
 using CRUD_Cshart.Models;
+using System.Linq;
 
 namespace CRUD_Cshart
 {
-    // El nombre de la clase ahora es Formulario
     public partial class Formulario : Form
     {
+        private AprendizController aprendizController = new AprendizController();
+
         public Formulario()
         {
             InitializeComponent();
+            CargarComboBoxes();
         }
 
         private void Formulario_Load(object sender, EventArgs e)
         {
-            // Puedes agregar lógica de carga inicial aquí.
+        }
+
+        private void CargarComboBoxes()
+        {
+            try
+            {
+                // Se cargan los tipos de documento
+                var tiposDocumento = aprendizController.ObtenerTiposDeDocumento()
+                    .Select(x => new { Value = x.id, Text = x.nombre }).ToList();
+                cmbTipoDocumento.DisplayMember = "Text";
+                cmbTipoDocumento.ValueMember = "Value";
+                cmbTipoDocumento.DataSource = tiposDocumento;
+                cmbTipoDocumento.SelectedIndex = -1;
+
+                // Se cargan los géneros
+                var generos = aprendizController.ObtenerGeneros()
+                    .Select(x => new { Value = x.id, Text = x.nombre }).ToList();
+                cmbGenero.DisplayMember = "Text";
+                cmbGenero.ValueMember = "Value";
+                cmbGenero.DataSource = generos;
+                cmbGenero.SelectedIndex = -1; 
+
+                // Se cargan los grupos sanguíneos
+                var gruposSanguineos = aprendizController.ObtenerGruposSanguineos()
+                    .Select(x => new { Value = x.id, Text = x.nombre }).ToList();
+                cmbGrupoSanguineo.DisplayMember = "Text";
+                cmbGrupoSanguineo.ValueMember = "Value";
+                cmbGrupoSanguineo.DataSource = gruposSanguineos;
+                cmbGrupoSanguineo.SelectedIndex = -1; 
+
+                // Se cargan los factores sanguíneos
+                var factoresSanguineos = aprendizController.ObtenerFactoresSanguineos()
+                    .Select(x => new { Value = x.id, Text = x.nombre }).ToList();
+                cmbFactorSanguineo.DisplayMember = "Text";
+                cmbFactorSanguineo.ValueMember = "Value";
+                cmbFactorSanguineo.DataSource = factoresSanguineos;
+                cmbFactorSanguineo.SelectedIndex = -1; 
+
+                // Se cargan los programas
+                var programas = aprendizController.ObtenerProgramas()
+                    .Select(x => new { Value = x.id, Text = x.nombre }).ToList();
+                cmbPrograma.DisplayMember = "Text";
+                cmbPrograma.ValueMember = "Value";
+                cmbPrograma.DataSource = programas;
+                cmbPrograma.SelectedIndex = -1; 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar los datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             try
-            {
-                // 1. Validar campos obligatorios
+            {   // Validación de campos obligatorios
                 if (string.IsNullOrWhiteSpace(txtPrimerNombre.Text) ||
                     string.IsNullOrWhiteSpace(txtPrimerApellido.Text) ||
-                    string.IsNullOrWhiteSpace(txtNumeroDocumento.Text))
+                    string.IsNullOrWhiteSpace(txtNumeroDocumento.Text) ||
+                    cmbTipoDocumento.SelectedValue == null ||
+                    cmbGenero.SelectedValue == null ||
+                    cmbGrupoSanguineo.SelectedValue == null ||
+                    cmbFactorSanguineo.SelectedValue == null ||
+                    cmbPrograma.SelectedValue == null)
                 {
-                    MessageBox.Show("El primer nombre, primer apellido y número de documento son obligatorios.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Todos los campos son obligatorios. Por favor complete toda la información.",
+                        "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // 2. Mapear los valores de los ComboBox a los IDs numéricos
-                int tipoDocumentoId = ObtenerIdTipoDocumento(cmbTipoDocumento.SelectedItem?.ToString());
-                int grupoSanguineoId = ObtenerIdGrupoSanguineo(cmbGrupoSanguineo.SelectedItem?.ToString());
-                int factorSanguineoId = ObtenerIdFactorSanguineo(cmbFactorSanguineo.SelectedItem?.ToString());
-                int generoId = ObtenerIdGenero(cmbGenero.SelectedItem?.ToString());
-                int programaId = ObtenerIdPrograma(txtPrograma.Text);
-
-                // 3. Crear una instancia del objeto Aprendiz
                 var nuevoAprendiz = new Aprendiz
                 {
-                    PrimerNombre = txtPrimerNombre.Text,
-                    SegundoNombre = txtSegundoNombre.Text,
-                    PrimerApellido = txtPrimerApellido.Text,
-                    SegundoApellido = txtSegundoApellido.Text,
+                    PrimerNombre = txtPrimerNombre.Text.Trim(),
+                    SegundoNombre = txtSegundoNombre.Text.Trim(),
+                    PrimerApellido = txtPrimerApellido.Text.Trim(),
+                    SegundoApellido = txtSegundoApellido.Text.Trim(),
                     FechaNacimiento = dtpFechaNacimiento.Value,
-                    TipoDocumentoId = tipoDocumentoId,
-                    NumeroDocumento = txtNumeroDocumento.Text,
-                    GrupoSanguineoId = grupoSanguineoId,
-                    FactorSanguineoId = factorSanguineoId,
-                    GeneroId = generoId,
-                    ProgramaId = programaId
+                    TipoDocumentoId = (int)cmbTipoDocumento.SelectedValue,
+                    NumeroDocumento = txtNumeroDocumento.Text.Trim(),
+                    GrupoSanguineoId = (int)cmbGrupoSanguineo.SelectedValue,
+                    FactorSanguineoId = (int)cmbFactorSanguineo.SelectedValue,
+                    GeneroId = (int)cmbGenero.SelectedValue,
+                    ProgramaId = (int)cmbPrograma.SelectedValue
                 };
 
-                // 4. Invocar el controlador para guardar el nuevo aprendiz
-                var aprendizController = new AprendizController();
                 bool exito = aprendizController.CrearAprendiz(nuevoAprendiz);
 
-                // 5. Notificar al usuario y limpiar los campos
                 if (exito)
                 {
                     MessageBox.Show("El registro se ha agregado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -66,7 +112,7 @@ namespace CRUD_Cshart
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo agregar el registro. Revisa el error en la consola.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("No se pudo agregar el registro.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
@@ -77,77 +123,23 @@ namespace CRUD_Cshart
 
         private void LimpiarCampos()
         {
+            // Se limpian los campos de texto
             txtPrimerNombre.Clear();
             txtSegundoNombre.Clear();
             txtPrimerApellido.Clear();
             txtSegundoApellido.Clear();
             txtNumeroDocumento.Clear();
-            txtPrograma.Clear();
 
+            // Se limpian los ComboBoxes
             cmbTipoDocumento.SelectedIndex = -1;
             cmbGrupoSanguineo.SelectedIndex = -1;
             cmbFactorSanguineo.SelectedIndex = -1;
             cmbGenero.SelectedIndex = -1;
+            cmbPrograma.SelectedIndex = -1;
 
             dtpFechaNacimiento.Value = DateTime.Now;
-        }
 
-        // --- Métodos auxiliares para mapear los valores a IDs ---
-        // Estos métodos asumen que ya tienes una tabla para cada ComboBox
-        // y que los valores de los ComboBox corresponden a IDs.
-        private int ObtenerIdTipoDocumento(string tipo)
-        {
-            switch (tipo)
-            {
-                case "Cédula de Ciudadanía": return 1;
-                case "Tarjeta de Identidad": return 2;
-                case "Cédula de Extranjería": return 3;
-                case "Pasaporte": return 4;
-                default: return 0;
-            }
+            txtPrimerNombre.Focus();
         }
-
-        private int ObtenerIdGrupoSanguineo(string grupo)
-        {
-            switch (grupo)
-            {
-                case "A": return 1;
-                case "B": return 2;
-                case "AB": return 3;
-                case "O": return 4;
-                default: return 0;
-            }
-        }
-
-        private int ObtenerIdFactorSanguineo(string factor)
-        {
-            switch (factor)
-            {
-                case "+": return 1;
-                case "-": return 2;
-                default: return 0;
-            }
-        }
-
-        private int ObtenerIdGenero(string genero)
-        {
-            switch (genero)
-            {
-                case "Masculino": return 1;
-                case "Femenino": return 2;
-                case "Otro": return 3;
-                default: return 0;
-            }
-        }
-
-        // Este método necesita una lógica para obtener el ID del programa
-        // Podrías tener una tabla de programas en la BD y obtener el ID a partir del nombre.
-        private int ObtenerIdPrograma(string nombrePrograma)
-        {
-            // Implementa la lógica aquí. Por ahora, un valor fijo
-            return 1;
-        }
-
-        // Métodos de evento vacíos eliminados para mayor claridad.
     }
 }

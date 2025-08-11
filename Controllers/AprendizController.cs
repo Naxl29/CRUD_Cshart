@@ -48,6 +48,157 @@ namespace CRUD_Cshart.Controllers
                 return false;
             }
         }
+
+        public List<(int id, string nombre)> ObtenerTiposDeDocumento()
+        {
+            var tipos = new List<(int, string)>();
+            try
+            {
+                using (MySqlConnection conn = getConnection())
+                {
+                    string query = @"SELECT p.id, p.nombre 
+                                   FROM parametro p 
+                                   INNER JOIN tema_parametro tp ON p.id = tp.parametro_id 
+                                   INNER JOIN temas t ON tp.tema_id = t.id 
+                                   WHERE t.nombre = 'TIPO_DOCUMENTO'";
+
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            tipos.Add((reader.GetInt32("id"), reader.GetString("nombre")));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener tipos de documento: {ex.Message}");
+            }
+            return tipos;
+        }
+
+        public List<(int id, string nombre)> ObtenerGeneros()
+        {
+            var generos = new List<(int, string)>();
+            try
+            {
+                using (MySqlConnection conn = getConnection())
+                {
+                    string query = @"SELECT p.id, p.nombre 
+                                   FROM parametro p 
+                                   INNER JOIN tema_parametro tp ON p.id = tp.parametro_id 
+                                   INNER JOIN temas t ON tp.tema_id = t.id 
+                                   WHERE t.nombre = 'GENERO'";
+
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            generos.Add((reader.GetInt32("id"), reader.GetString("nombre")));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener géneros: {ex.Message}");
+            }
+            return generos;
+        }
+
+        public List<(int id, string nombre)> ObtenerGruposSanguineos()
+        {
+            var grupos = new List<(int, string)>();
+            try
+            {
+                using (MySqlConnection conn = getConnection())
+                {
+                    string query = @"SELECT p.id, p.nombre 
+                                   FROM parametro p 
+                                   INNER JOIN tema_parametro tp ON p.id = tp.parametro_id 
+                                   INNER JOIN temas t ON tp.tema_id = t.id 
+                                   WHERE t.nombre = 'GRUPO_SANGUINEO'";
+
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            grupos.Add((reader.GetInt32("id"), reader.GetString("nombre")));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener grupos sanguíneos: {ex.Message}");
+            }
+            return grupos;
+        }
+
+        public List<(int id, string nombre)> ObtenerFactoresSanguineos()
+        {
+            var factores = new List<(int, string)>();
+            try
+            {
+                using (MySqlConnection conn = getConnection())
+                {
+                    string query = @"SELECT p.id, p.nombre 
+                                   FROM parametro p 
+                                   INNER JOIN tema_parametro tp ON p.id = tp.parametro_id 
+                                   INNER JOIN temas t ON tp.tema_id = t.id 
+                                   WHERE t.nombre = 'FACTOR_SANGUINEO'";
+
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            factores.Add((reader.GetInt32("id"), reader.GetString("nombre")));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener factores sanguíneos: {ex.Message}");
+            }
+            return factores;
+        }
+
+        public List<(int id, string nombre)> ObtenerProgramas()
+        {
+            var programas = new List<(int, string)>();
+            try
+            {
+                using (MySqlConnection conn = getConnection())
+                {
+                    string query = @"SELECT p.id, p.nombre 
+                                   FROM parametro p 
+                                   INNER JOIN tema_parametro tp ON p.id = tp.parametro_id 
+                                   INNER JOIN temas t ON tp.tema_id = t.id 
+                                   WHERE t.nombre = 'PROGRAMA_FORMACION'";
+
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            programas.Add((reader.GetInt32("id"), reader.GetString("nombre")));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener programas: {ex.Message}");
+            }
+            return programas;
+        }
+
         public bool VerAprendiz(int id)
         {
             try

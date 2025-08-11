@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 
-
 namespace CRUD_Cshart.Config
 {
     public static class ConfigManager
     {
         private static readonly Dictionary<string, string> _settings = new();
 
-        static ConfigManager()
+        public static void LoadConfig(string fileName)
         {
-            LoadConfig("config.properties");
-        }
+            // Busca el archivo en el mismo directorio donde está el ejecutable
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
 
-        private static void LoadConfig(string path)
-        {
             if (!File.Exists(path))
             {
                 throw new FileNotFoundException($"Archivo de configuración no encontrado: {path}");
@@ -24,7 +21,7 @@ namespace CRUD_Cshart.Config
             var lines = File.ReadAllLines(path);
             foreach (var line in lines)
             {
-                if (string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#"))
                     continue;
 
                 var parts = line.Split('=', 2);
@@ -39,6 +36,5 @@ namespace CRUD_Cshart.Config
         {
             return _settings.TryGetValue(key, out string? value) ? value : null;
         }
-
     }
 }
